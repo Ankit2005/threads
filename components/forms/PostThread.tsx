@@ -23,6 +23,7 @@ import Image from "next/image";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
 import { ThreadValidation } from "@/lib/validations/thread";
+import { createThread } from "@/lib/actions/thread.action";
 
 function PostThread({ userId }: { userId: string }) {
   const router = useRouter();
@@ -36,7 +37,16 @@ function PostThread({ userId }: { userId: string }) {
     },
   });
 
-  const onSubmit = async () => {};
+  const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+    console.log(values);
+    await createThread({
+      text: values.thread,
+      author: userId,
+      communityId: null,
+      path: pathname,
+    });
+    router.push("/");
+  };
 
   return (
     <>
